@@ -4,8 +4,9 @@ using UnityEngine;
 using System;
 
 public class PlayerController : MonoBehaviour {
-
     public GameObject turret;
+    public GameObject bullet;
+    public float bulletSpeed = 50.0f;
 
     float moveX;
     float moveY;
@@ -35,7 +36,9 @@ public class PlayerController : MonoBehaviour {
         turretAngle = (mouseX >= 0 ? 1 : -1) * Vector3.Angle(Vector3.up, new Vector3(mouseX, mouseY));
         angle = (moveX >= 0 ? 1 : -1) * Vector3.Angle(Vector3.up, new Vector3(moveX, moveY));
 
-        Debug.Log(turretAngle);
+        //Debug.Log(turretAngle);
+
+
     }
 
     void FixedUpdate()
@@ -55,5 +58,16 @@ public class PlayerController : MonoBehaviour {
         Quaternion turretTo = Quaternion.Euler(0f, 0f, -turretAngle);
 
         turret.transform.rotation = Quaternion.Lerp(turretFrom, turretTo, Time.fixedDeltaTime * 50.0f);
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            //Debug.Log(turret.transform.rotation);
+
+            var newBullet = Instantiate(bullet, transform.position, turret.transform.rotation);
+            var bulletAngle = (turretAngle + 90.0) * Math.PI / 180.0f;
+            
+            //Debug.Log(new Vector3((float)Math.Cos(bulletAngle), (float)Math.Sin(bulletAngle));
+            newBullet.GetComponent<Rigidbody2D>().AddForce(new Vector3(-(float)Math.Cos(bulletAngle), (float)Math.Sin(bulletAngle)) * bulletSpeed);
+        }
     }
 }
