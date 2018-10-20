@@ -50,3 +50,6 @@ TagManager:
   - name: Tanks
     uniqueID: 3489638187
     locked: 0
+  - name: Bullets
+    uniqueID: 3481841047
+    locked: 0

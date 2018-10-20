@@ -4,33 +4,38 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
+    public float timeAlive = 5.0f;
+
+    // TODO: pochodzenie pocisku, czy możesz się zabić swoim?
     int hitCount = 0;
+    string collisionSortingLayerName;
 
     void Start()
     {
-        Debug.Log(LayerMask.NameToLayer("Bullets"));
-        Debug.Log(LayerMask.NameToLayer("Tanks"));
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Bullets"), LayerMask.NameToLayer("Tanks"));
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Bullets"), LayerMask.NameToLayer("Tanks"));
     }
 
     void Update()
     {
+        timeAlive -= Time.deltaTime;
 
-        //Destroy(gameObject);
+        if (timeAlive <= 0.0f)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.contacts[0].normal);
-        //Debug.Log(collision.gameObject.GetComponent<SpriteRenderer>().sortingLayerName);
+        collisionSortingLayerName = collision.gameObject.GetComponent<SpriteRenderer>().sortingLayerName;
 
-        if (collision.gameObject.GetComponent<SpriteRenderer>().sortingLayerName == "Environment")
+        if (collisionSortingLayerName == "Environment")
         {
             //Debug.Log("Hit!!!!!!!!");
 
             if (hitCount == 0)
             {
-                // Odbij pocisk
+                // TODO: Odbij pocisk
                 gameObject.GetComponent<Rigidbody2D>().MoveRotation(transform.rotation.z + 90.0f);
 
                 hitCount++;
